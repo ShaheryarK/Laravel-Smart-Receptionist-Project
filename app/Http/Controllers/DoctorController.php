@@ -5,17 +5,20 @@ use App\Doctor;
 use Illuminate\Http\Request;
 use Response;
 use AppointmentSlotTransformer;
+use DoctorTransformer;
 class DoctorController extends Controller
 {
     protected $AppointmentSlotTransformer;
+    protected  $DoctorTransformer;
 
     /**
      * DoctorController constructor.
      * @param $AppointmentSlotTransformer
      */
-    public function __construct(AppointmentSlotTransformer $AppointmentSlotTransformer)
+    public function __construct(AppointmentSlotTransformer $AppointmentSlotTransformer, DoctorTransformer $DoctorTransformer)
     {
         $this->AppointmentSlotTransformer = $AppointmentSlotTransformer;
+        $this->DoctorTransformer = $DoctorTransformer;
     }
 
     /**
@@ -25,7 +28,10 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        return Doctor::All();
+        $doctors = Doctor::All();
+        return Response::json([
+            'data' => $this->DoctorTransformer->transformCollection($doctors->toArray())
+        ], 200);
     }
 
     /**
@@ -57,7 +63,17 @@ class DoctorController extends Controller
      */
     public function show($id)
     {
-        return Doctor:: find($id);
+        $doctor = Doctor:: find($id);
+        if(!$doctor)
+        {
+            return Response::json([
+                'error'  => [ 'message' => 'Doctor Doesnt exist']
+            ], 404);
+        }
+
+        return Response::json([
+            'data' => $this->DoctorTransformer->transform($doctor)
+        ], 200);
     }
 
     /**

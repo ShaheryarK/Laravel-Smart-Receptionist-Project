@@ -5,9 +5,25 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Appointment;
 use App\AppointmentSlot;
+use AppointmentTransformer;
+use Response;
 
 class AppointmentController extends Controller
 {
+
+    protected  $AppointmentTransformer;
+
+    /**
+     * AppointmentController constructor.
+     * @param $AppointmentTransformer
+     */
+    public function __construct(AppointmentTransformer $AppointmentTransformer)
+    {
+        $this->AppointmentTransformer = $AppointmentTransformer;
+
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -50,7 +66,17 @@ class AppointmentController extends Controller
      */
     public function show($id)
     {
-        return Appointment::find($id)->appointmentslot;
+         $appointment = Appointment::find($id)->appointmentslot;
+        if(!$appointment)
+        {
+            return Response::json([
+                'error'  => [ 'message' => 'Appointment Doesnt exist']
+            ], 404);
+        }
+
+        return Response::json([
+            'data' => $this->AppointmentTransformer->transform($appointment)
+        ], 200);
 
     }
 

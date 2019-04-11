@@ -3,9 +3,27 @@
 namespace App\Http\Controllers;
 use App\Patient;
 use Illuminate\Http\Request;
+use PatientTransformer;
+use AppointmentTransformer;
+use Response;
 
 class PatientController extends Controller
 {
+    Protected $PatientTransformer;
+    protected  $AppointmentTransformer;
+
+    /**
+     * PatientController constructor.
+     * @param $PatientTransformer
+     */
+    public function __construct(PatientTransformer $PatientTransformer,AppointmentTransformer $AppointmentTransformer)
+    {
+        $this->PatientTransformer = $PatientTransformer;
+        $this->AppointmentTransformer = $AppointmentTransformer;
+
+    }
+
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +31,11 @@ class PatientController extends Controller
      */
     public function index()
     {
-        return Patient::All();
+        $patient = Patient::All();
+
+        return Response::json([
+            'data' => $this->PatientTransformer->transformCollection($patient->toArray())
+        ], 200);
     }
 
     /**
@@ -45,12 +67,25 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-        return Patient:: find($id);
+        $patient = Patient:: find($id);
+        if(!$patient)
+        {
+            return Response::json([
+                'error'  => [ 'message' => 'Patient Doesnt exist']
+            ], 404);
+        }
+
+        return Response::json([
+            'data' => $this->PatientTransformer->transform($patient)
+        ], 200);
     }
 
     public function patientAppointments($id)
     {
-        return Patient::find($id)->appointment;
+         $appointment = Patient::find($id)->appointment;
+        return Response::json([
+            'data' => $this->AppointmentTransformer->transformCollection($appointment->toArray())
+        ], 200);
     }
 
     /**

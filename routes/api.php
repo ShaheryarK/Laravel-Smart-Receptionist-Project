@@ -25,8 +25,8 @@ Route::put('patients/{id}', 'PatientController@update');
 Route::delete('patients/{id}', 'PatientController@destroy');
 
 Route::get('doctors', 'DoctorController@index');
-Route::get('doctors/{id}', 'DoctorController@show');
-Route::get('doctors/appointmentslots/{id}', 'DoctorController@showAppointmentslots');
+Route::get('doctor/{id}', 'DoctorController@show');
+Route::get('doctor/appointmentslots/{id}', 'DoctorController@showAppointmentslots');
 Route::post('doctors', 'DoctorController@store');
 Route::put('doctors/{id}', 'DoctorController@update');
 Route::delete('doctor/{id}', 'DoctorController@destroy');
