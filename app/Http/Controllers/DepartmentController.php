@@ -5,18 +5,21 @@ namespace App\Http\Controllers;
 use App\Department;
 use Illuminate\Http\Request;
 use DoctorTransformer;
+use DepartmentTransformer;
 use Response;
 class DepartmentController extends Controller
 {
     protected $DoctorTransformer;
+    protected $DepartmentTransformer;
 
     /**
      * DepartmentController constructor.
      * @param $DoctorTransformer
      */
-    public function __construct(DoctorTransformer $DoctorTransformer)
+    public function __construct(DoctorTransformer $DoctorTransformer, DepartmentTransformer $DepartmentTransformer)
     {
         $this->DoctorTransformer = $DoctorTransformer;
+        $this->DepartmentTransformer =$DepartmentTransformer;
     }
 
     /**
@@ -26,7 +29,10 @@ class DepartmentController extends Controller
      */
     public function index()
     {
-        return Department::all();
+       $department = Department::all();
+        return Response::json([
+            'data' => $this->DepartmentTransformer->transformCollection($department->toArray())
+        ], 200);
     }
 
     /**
@@ -47,7 +53,12 @@ class DepartmentController extends Controller
      */
     public function store(Request $request)
     {
-        return Department::create($request->all());
+        $department = Department::create($request->all());
+
+       return Response::json([
+            'data' => $this->DepartmentTransformer->transform($department)
+        ], 200);
+
     }
 
     /**
@@ -58,7 +69,17 @@ class DepartmentController extends Controller
      */
     public function show($id)
     {
-        return Department::find($id);
+       $department = Department::find($id);
+        if(!$department)
+        {
+            return Response::json([
+                'error'  => [ 'message' => 'Department Doesnt exist']
+            ], 404);
+        }
+
+        return Response::json([
+            'data' => $this->DepartmentTransformer->transform($department)
+        ], 200);
     }
 
     /**
@@ -84,7 +105,9 @@ class DepartmentController extends Controller
         $department = Department::findOrFail($id);
         $department->update($request->all());
 
-        return $department;
+        return Response::json([
+            'data' => $this->DepartmentTransformer->transform($department)
+        ], 200);
     }
 
     public function departmentDoctors($id)
