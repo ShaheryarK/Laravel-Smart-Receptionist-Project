@@ -15,8 +15,8 @@ class CreateAppointmentSlotsTable extends Migration
     {
         Schema::create('appointment_slots', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->dateTime('start time');
-            $table->boolean('Booking status');
+            $table->dateTime('start_time');
+            $table->boolean('booking_status');
             $table->unsignedBigInteger('timeslot_id');
             $table->timestamps();
             $table->foreign('timeslot_id')->references('id')->on('timeslots')->onUpdate('cascade')->onDelete('cascade');

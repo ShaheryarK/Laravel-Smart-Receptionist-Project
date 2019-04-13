@@ -13,7 +13,7 @@ class AppointmentTransformer extends Transformer
             return ['appointment_id' => $appointment['id'], "doctor id"=> $appointment["doctor_id"],
         "patient id" =>$appointment["patient_id"],
         "appointmentslot ID"=>$appointment["appointmentslot_id"],
-        "end time" =>$appointment["end time"],
+        'end time'=>date('h:i:a', strtotime($appointment["end_time"])),'end date'=>date('d-m-Y', strtotime($appointment["end_time"])),
         "status"=>$appointment["status"],];
     }
 }

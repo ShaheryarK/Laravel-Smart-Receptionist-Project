@@ -19,7 +19,7 @@ class CreateAppointmentsTable extends Migration
             $table->unsignedBigInteger('doctor_id');
             $table->unsignedBigInteger('patient_id');
             $table->unsignedBigInteger('appointmentslot_id');
-            $table->dateTime('end time');
+            $table->dateTime('end_time');
             $table->integer('status');
             $table->timestamps();
             $table->foreign('doctor_id')->references('id')->on('doctors')->onUpdate('cascade')->onDelete('cascade');

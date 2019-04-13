@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Timeslot extends Model
 {
-    protected  $fillable = ['start time','stop time'];
+    protected  $fillable = ['start_time','end_time','doctor_id','status'];
 
     public function doctor()
     {

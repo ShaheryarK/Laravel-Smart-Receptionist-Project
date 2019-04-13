@@ -5,20 +5,23 @@ use App\Doctor;
 use Illuminate\Http\Request;
 use Response;
 use AppointmentSlotTransformer;
+use SlotTransformer;
 use DoctorTransformer;
 class DoctorController extends Controller
 {
     protected $AppointmentSlotTransformer;
     protected  $DoctorTransformer;
+    protected   $SlotTransformer;
 
     /**
      * DoctorController constructor.
      * @param $AppointmentSlotTransformer
      */
-    public function __construct(AppointmentSlotTransformer $AppointmentSlotTransformer, DoctorTransformer $DoctorTransformer)
+    public function __construct(AppointmentSlotTransformer $AppointmentSlotTransformer, DoctorTransformer $DoctorTransformer,SlotTransformer $slotTransformer)
     {
         $this->AppointmentSlotTransformer = $AppointmentSlotTransformer;
         $this->DoctorTransformer = $DoctorTransformer;
+        $this->SlotTransformer = $slotTransformer;
     }
 
     /**
@@ -101,12 +104,45 @@ class DoctorController extends Controller
 
         return $doctor;
     }
+
+
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function showAppointmentslots($id)
     {
         $appointmentslots = Doctor::find($id)->appointmentslots;
 
+        if(!$appointmentslots)
+        {
+            return Response::json([
+                'error'  => [ 'message' => 'No Appointment slot found']
+            ], 404);
+        }
+
         return Response::json([
-            'data' => $this->AppointmentSlotTransformer->transformCollection($appointmentslots->toArray())
+            'data' => array_filter($this->AppointmentSlotTransformer->transformCollection($appointmentslots->toArray()))
+        ], 200);
+
+    }
+
+
+
+
+    public function showFreeslots($id)
+    {
+        $allslots = Doctor::find($id)->appointmentslots;
+
+        if(!$allslots)
+        {
+            return Response::json([
+                'error'  => [ 'message' => 'No Appointment slot found']
+            ], 404);
+        }
+
+        return Response::json([
+            'data' => array_filter($this->SlotTransformer->TransformCollection($allslots->toArray()))
         ], 200);
 
     }

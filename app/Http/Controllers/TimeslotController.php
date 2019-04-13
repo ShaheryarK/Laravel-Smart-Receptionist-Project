@@ -1,28 +1,26 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Patient;
-use Illuminate\Http\Request;
-use PatientTransformer;
-use AppointmentTransformer;
-use Response;
 
-class PatientController extends Controller
+use App\Timeslot;
+use Illuminate\Http\Request;
+use TimeslotTransformer;
+use DateTime;
+use App\Doctor;
+use Response;
+use App\AppointmentSlot;
+class TimeslotController extends Controller
 {
-    Protected $PatientTransformer;
-    protected  $AppointmentTransformer;
+    protected  $TimeslotTransformer;
 
     /**
-     * PatientController constructor.
-     * @param $PatientTransformer
+     * TimeslotController constructor.
+     * @param $TimeslotTransformer
      */
-    public function __construct(PatientTransformer $PatientTransformer,AppointmentTransformer $AppointmentTransformer)
+    public function __construct( TimeslotTransformer $TimeslotTransformer)
     {
-        $this->PatientTransformer = $PatientTransformer;
-        $this->AppointmentTransformer = $AppointmentTransformer;
-
+        $this->TimeslotTransformer = $TimeslotTransformer;
     }
-
 
     /**
      * Display a listing of the resource.
@@ -31,10 +29,10 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patient = Patient::All();
+        $Timeslots = Timeslot::all();
 
         return Response::json([
-            'data' => $this->PatientTransformer->transformCollection($patient->toArray())
+            'data' => $this->TimeslotTransformer->transformCollection($Timeslots->toArray())
         ], 200);
     }
 
@@ -45,7 +43,7 @@ class PatientController extends Controller
      */
     public function create()
     {
-
+        //
     }
 
     /**
@@ -56,7 +54,10 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-       return  Patient::create($request->all());
+        $Timeslot = Timeslot::create($request->all());
+        $this->AddAppointmentSlots($Timeslot,15);
+        return $Timeslot;
+
     }
 
     /**
@@ -67,30 +68,26 @@ class PatientController extends Controller
      */
     public function show($id)
     {
-        $patient = Patient:: find($id);
-        if(!$patient)
-        {
-            return Response::json([
-                'error'  => [ 'message' => 'Patient Doesnt exist']
-            ], 404);
-        }
-
-        return Response::json([
-            'data' => $this->PatientTransformer->transform($patient)
-        ], 200);
+        //
     }
 
-    public function patientAppointments($id)
+
+    /**
+     * @param $id
+     * @return Doctor's time slots
+     */
+    public function dshow($id)
     {
-         $appointment = Patient::find($id)->appointment;
-        if(!$appointment)
+        $tms = Doctor::find($id)->timeslots;
+        if(!$tms)
         {
             return Response::json([
-                'error'  => [ 'message' => 'Patient have no Appointment history']
+                'error'  => [ 'message' => 'no time slots found']
             ], 404);
         }
+
         return Response::json([
-            'data' => $this->AppointmentTransformer->transformCollection($appointment->toArray())
+            'data' => $this->TimeslotTransformer->transform($tms)
         ], 200);
     }
 
@@ -102,7 +99,7 @@ class PatientController extends Controller
      */
     public function edit($id)
     {
-
+        //
     }
 
     /**
@@ -114,10 +111,10 @@ class PatientController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $patient = Patient::findOrFail($id);
-        $patient->update($request->all());
+        $Timeslot = Timeslot::findOrFail($id);
+        $Timeslot->update($request->all());
 
-        return $patient;
+        return $Timeslot;
     }
 
     /**
@@ -128,8 +125,20 @@ class PatientController extends Controller
      */
     public function destroy($id)
     {
-        $patient = Patient::findorFail($id);
-        $patient->delete();
+        $timeslot = Timeslot::findorFail($id);
+        $timeslot->delete();
         return 204;
+    }
+
+    public function AddAppointmentSlots($time,$interval)
+    {
+        $startT = new DateTime($time["start_time"]);
+        $end   = new DateTime($time["end_time"]);
+        while($startT < $end)
+        {
+            AppointmentSlot::create( ["timeslot_id"=>$time["id"],"start_time"=>$startT->format('Y-m-d H:i:s'),]);
+            $startT->add(new \DateInterval('PT'.$interval.'M'));
+        }
+        return;
     }
 }

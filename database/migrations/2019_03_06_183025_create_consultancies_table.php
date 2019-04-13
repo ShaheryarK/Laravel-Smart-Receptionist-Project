@@ -16,8 +16,8 @@ class CreateConsultanciesTable extends Migration
         Schema::create('consultancies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('doctor_id');
-            $table->timestamp('start time');
-            $table->timestamp('end time')->nullable();
+            $table->timestamp('start_time');
+            $table->timestamp('end_time')->nullable();
             $table->timestamps();
 
             $table->foreign('doctor_id')->references('id')->on('doctors')->onUpdate('cascade')->onDelete('cascade');

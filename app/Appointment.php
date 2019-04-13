@@ -10,7 +10,7 @@ class Appointment extends Model
 
     public function feedback()
     {
-        return $this->hasMany('App\Feedback');
+        return $this->hasOne('App\Feedback');
     }
 
     public function appointmentslot()

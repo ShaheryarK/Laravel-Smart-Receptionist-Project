@@ -2,10 +2,24 @@
 
 namespace App\Http\Controllers;
 
+use App\Appointment;
 use Illuminate\Http\Request;
+use Response;
+use FeedbackTransformer;
 
 class FeedbackController extends Controller
 {
+    protected $FeedbackTransformer;
+
+    /**
+     * FeedbackController constructor.
+     * @param $FeedbackTransformer
+     */
+    public function __construct(FeedbackTransformer $FeedbackTransformer)
+    {
+        $this->FeedbackTransformer = $FeedbackTransformer;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +48,7 @@ class FeedbackController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -47,6 +61,27 @@ class FeedbackController extends Controller
     {
         //
     }
+
+
+
+
+
+    public function feedbackDetails($id)
+    {
+        $feedback = Appointment::find($id)->feedback;
+        if(!$feedback)
+        {
+            return Response::json([
+                'error'  => [ 'message' => 'Feedback Not Found']
+            ], 404);
+        }
+
+        return Response::json([
+            'data' => $this->FeedbackTransformer->transform($feedback)
+        ], 200);
+
+    }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -79,6 +114,6 @@ class FeedbackController extends Controller
      */
     public function destroy($id)
     {
-        //
+
     }
 }

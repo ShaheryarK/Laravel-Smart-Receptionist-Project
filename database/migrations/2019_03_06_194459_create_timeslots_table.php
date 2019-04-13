@@ -16,8 +16,8 @@ class CreateTimeslotsTable extends Migration
         Schema::create('timeslots', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('doctor_id');
-            $table->dateTime('start time');
-            $table->dateTime('stop time')->nullable();
+            $table->dateTime('start_time');
+            $table->dateTime('stop_time')->nullable();
             $table->integer('status');
             $table->timestamps();
             $table->foreign('doctor_id')->references('id')->on('doctors')->onUpdate('cascade')->onDelete('cascade');

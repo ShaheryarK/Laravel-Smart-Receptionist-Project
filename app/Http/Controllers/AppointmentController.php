@@ -66,7 +66,7 @@ class AppointmentController extends Controller
      */
     public function show($id)
     {
-         $appointment = Appointment::find($id)->appointmentslot;
+         $appointment = Appointment::find($id);
         if(!$appointment)
         {
             return Response::json([
@@ -83,9 +83,11 @@ class AppointmentController extends Controller
     public function appointmentDetails($id)
     {
         $doctor = Appointment::find($id)->doctor;
-        $patient=  Appointment::find($id)->patient;
-        $time = Appointment::find($id)->appointmentslot;
-        return $appointmentdetail = ['patient name' => $patient['firstname'],'doctor name'=> $doctor['firstname'],'Appointment time'=>$time['start time']];
+        $patient= Appointment::find($id)->patient;
+        $startT = Appointment::find($id)->appointmentslot;
+        $appointment =Appointment::find($id);
+        return $appointmentdetail = ['patient name' => $patient['firstname'],'doctor name'=> $doctor['firstname'],'Appointment start time'=> date("H:i A",strtotime($startT['start_time'])),"Appointment end time" =>date("h:i:s A",strtotime($appointment["end_time"]))
+        , 'Appointment start Date' => date("d-m-Y",strtotime($startT['start_time'])),'Appointment end date'=>date("d-m-Y",strtotime($appointment['end_time'])) ];
     }
 
     /**
@@ -108,7 +110,10 @@ class AppointmentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $Appointment = Appointment::findOrFail($id);
+        $Appointment->update($request->all());
+
+        return $Appointment;
     }
 
     /**
@@ -119,6 +124,8 @@ class AppointmentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $Appointment = Appointment::findorFail($id);
+        $Appointment->delete();
+        return 204;
     }
 }
