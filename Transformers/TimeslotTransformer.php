@@ -10,6 +10,6 @@ class TimeslotTransformer extends  Transformer
 {
     public  function  transform($timeslot)
     {
-        return ['Timeslot ID' => $timeslot['id'],'Start Time'=>date('h:i A', strtotime($timeslot["start_time"])), 'End Time'=>date('h:i A', strtotime($timeslot["end_time"])),'Start Date'=>date('d-m-Y', strtotime($timeslot["start_time"])),'End Date'=>date('d-m-Y', strtotime($timeslot["end_time"])) ];
+        return ['timeslot_id' => $timeslot['id'] ,'starttime'=> date('h:i:s', strtotime($timeslot["start_time"])), 'endtime'=>date('h:i:s', strtotime($timeslot["end_time"])),'startdate'=>date('m-d-Y', strtotime($timeslot["start_time"])),'enddate'=>date('m-d-Y', strtotime($timeslot["end_time"]))];
     }
 }

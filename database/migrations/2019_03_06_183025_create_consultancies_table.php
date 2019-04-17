@@ -16,10 +16,12 @@ class CreateConsultanciesTable extends Migration
         Schema::create('consultancies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('doctor_id');
+            $table->unsignedBigInteger('timeslot_id');
             $table->timestamp('start_time');
+            $table->integer("status");
             $table->timestamp('end_time')->nullable();
             $table->timestamps();
-
+            $table->foreign('timeslot_id')->references('id')->on('timeslots')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('doctor_id')->references('id')->on('doctors')->onUpdate('cascade')->onDelete('cascade');
         });
     }

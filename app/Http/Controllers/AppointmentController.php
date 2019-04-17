@@ -52,10 +52,10 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        Appointment::create($request->all());
-        AppointmentSlot::find($request['appointment_slot_id'])->update(array('booking status' =>1));
+        $App = Appointment::create($request->all());
+         AppointmentSlot::find($request['appointmentslot_id'])->update(array('booking_status' =>1));
 
-        return Appointment::create($request->all());
+        return  $App;
     }
 
     /**
@@ -86,8 +86,8 @@ class AppointmentController extends Controller
         $patient= Appointment::find($id)->patient;
         $startT = Appointment::find($id)->appointmentslot;
         $appointment =Appointment::find($id);
-        return $appointmentdetail = ['patient name' => $patient['firstname'],'doctor name'=> $doctor['firstname'],'Appointment start time'=> date("H:i A",strtotime($startT['start_time'])),"Appointment end time" =>date("h:i:s A",strtotime($appointment["end_time"]))
-        , 'Appointment start Date' => date("d-m-Y",strtotime($startT['start_time'])),'Appointment end date'=>date("d-m-Y",strtotime($appointment['end_time'])) ];
+        return $appointmentdetail = ['patient name' => $patient['firstname'],'doctorname'=> $doctor['firstname'],'starttime'=> date("H:i A",strtotime($startT['start_time'])),"endtime" =>date("h:i A",strtotime($appointment["end_time"]))
+        , 'startdate' => date("d-m-Y",strtotime($startT['start_time'])),'enddate'=>date("d-m-Y",strtotime($appointment['end_time'])) ];
     }
 
     /**

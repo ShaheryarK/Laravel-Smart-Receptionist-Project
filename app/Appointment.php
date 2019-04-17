@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Appointment extends Model
 {
-    protected  $fillable = ['patient_id','doctor_id','appointment_slot_id','started time','end time'];
+    protected  $fillable = ['patient_id','doctor_id','appointmentslot_id','started time','end time'];
 
     public function feedback()
     {

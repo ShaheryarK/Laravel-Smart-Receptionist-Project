@@ -17,4 +17,9 @@ class Timeslot extends Model
     {
         return $this->hasMany('App\AppointmentSlot');
     }
+
+    public function consultancy()
+    {
+        return $this->hasOne('App\Consultancy');
+    }
 }

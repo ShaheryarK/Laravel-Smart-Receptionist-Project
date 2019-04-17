@@ -11,6 +11,6 @@ class DoctorTransformer extends Transformer
 
     public  function  transform($doctor)
     {
-        return ['Doctor id' => $doctor['id'],'First Name'=>$doctor['firstname'], 'Last Name' =>$doctor['lastname']];
+        return ['doctor_id' => $doctor['id'],'firstname'=>$doctor['firstname'], 'lastname' =>$doctor['lastname']];
     }
 }

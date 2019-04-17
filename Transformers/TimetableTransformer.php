@@ -11,6 +11,6 @@
 
     public  function  transform($timetable)
     {
-        return ['Doctor id' => $timetable['doctor_id'],'Timetable'=>$timetable['id']];
+        return ['doctor_id' => $timetable['doctor_id'],'timetable'=>$timetable['id']];
     }
 }

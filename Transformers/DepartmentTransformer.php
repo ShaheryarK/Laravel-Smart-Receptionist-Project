@@ -10,6 +10,6 @@ class DepartmentTransformer extends Transformer
 {
     public  function  transform($department)
     {
-        return ['Department id' => $department['id'],'Department Name'=>$department['name'], 'Description' => $department['description']];
+        return ['department_id' => $department['id'],'department_name'=>$department['name'], 'description' => $department['description']];
     }
 }

@@ -10,7 +10,7 @@ class AppointmentSlotTransformer extends  Transformer
 {
      public  function  transform($appointmentslot)
         {
-            return ['appointmentslot_id' => $appointmentslot['id'],"status"=>$appointmentslot["booking_status"],'start time'=>date('h:i A', strtotime($appointmentslot["start_time"])),'start date'=>date('d-m-Y', strtotime($appointmentslot["start_time"]))];
+            return ['appointmentslot_id' => $appointmentslot['id'],"status"=>$appointmentslot["booking_status"],'starttime'=>date('h:i:s', strtotime($appointmentslot["start_time"])),'startdate'=>date('m-d-Y', strtotime($appointmentslot["start_time"]))];
     }
 
 }

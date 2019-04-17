@@ -10,6 +10,6 @@
 {
     public  function  transform($feedback)
     {
-        return ['id' => $feedback['id'],'Rating'=>$feedback['rating'], 'comments' =>$feedback['comment']];
+        return ['id' => $feedback['id'],'rating'=>$feedback['rating'], 'comments' =>$feedback['comment']];
     }
 }

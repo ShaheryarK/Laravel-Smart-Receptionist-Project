@@ -11,6 +11,6 @@
 
     public  function  transform($patient)
     {
-        return ['Patient id' => $patient['id'],'First Name'=>$patient['firstname'], 'Last Name' =>$patient['lastname']];
+        return ['patient_id' => $patient['id'],'firstname'=>$patient['firstname'], 'lastname' =>$patient['lastname']];
     }
 }

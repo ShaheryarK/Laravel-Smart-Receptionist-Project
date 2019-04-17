@@ -56,8 +56,10 @@ class TimeslotController extends Controller
     {
         $Timeslot = Timeslot::create($request->all());
         $this->AddAppointmentSlots($Timeslot,15);
-        return $Timeslot;
 
+        return Response::json([
+            'data' => $this->TimeslotTransformer->transform($Timeslot->toArray())
+        ], 200);
     }
 
     /**
@@ -78,17 +80,18 @@ class TimeslotController extends Controller
      */
     public function dshow($id)
     {
-        $tms = Doctor::find($id)->timeslots;
+        $tms = Doctor::find($id)->timeslot;
         if(!$tms)
         {
             return Response::json([
                 'error'  => [ 'message' => 'no time slots found']
             ], 404);
         }
-
-        return Response::json([
-            'data' => $this->TimeslotTransformer->transform($tms)
-        ], 200);
+        else {
+            return Response::json([
+                'data' => $this->TimeslotTransformer->transformCollection($tms->toArray())
+            ], 200);
+        }
     }
 
     /**
@@ -134,6 +137,7 @@ class TimeslotController extends Controller
     {
         $startT = new DateTime($time["start_time"]);
         $end   = new DateTime($time["end_time"]);
+
         while($startT < $end)
         {
             AppointmentSlot::create( ["timeslot_id"=>$time["id"],"start_time"=>$startT->format('Y-m-d H:i:s'),]);
