@@ -40,20 +40,20 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
-        /*
+
         'patient' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'patients',
         ],
         'doctor' => [
-            'driver' => 'session',
+            'driver' => 'jwt',
             'provider' => 'doctors',
         ],
         'manager' => [
             'driver' => 'session',
             'provider' => 'managers',
         ],
-*/
+
         'api' => [
             'driver' => 'token',
             'provider' => 'users',
@@ -84,7 +84,7 @@ return [
             'model' => App\User::class,
 
         ],
-        /*'patients' => [
+        'patients' => [
             'driver' => 'eloquent',
             'model' => App\Patient::class,
 
@@ -98,7 +98,7 @@ return [
             'driver' => 'eloquent',
             'model' => App\Manager::class,
 
-        ],*/
+        ],
 
         // 'users' => [
         //     'driver' => 'database',

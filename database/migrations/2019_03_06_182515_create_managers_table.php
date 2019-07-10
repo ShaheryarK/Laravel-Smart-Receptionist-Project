@@ -20,9 +20,10 @@ class CreateManagersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('phonenumber');
+            $table->string('phonenumber');
             $table->date('DOB');
             $table->string('gender');
+            $table->string('image');
             $table->rememberToken();
             $table->timestamps();
         });

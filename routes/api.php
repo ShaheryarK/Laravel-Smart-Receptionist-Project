@@ -17,6 +17,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+
+//Doctor Auth
+Route::post('doctorlogin', 'Api\Doctor\Auth\LoginController@login');
+Route::post('doctorregister', 'Api\Doctor\Auth\RegisterController@register');
+//Patient Auth
+Route::post('patientlogin', 'Api\Patient\Auth\LoginController@login');
+Route::post('patientregister', 'Api\Patient\Auth\RegisterController@register');
+
 Route::get('patients', 'PatientController@index');
 Route::get('patients/{id}', 'PatientController@show');
 Route::get('patients/appointments/{id}', 'PatientController@patientAppointments');
